@@ -5,6 +5,7 @@ import injectStyles from 'react-jss'
 
 import ProfileInfo from './ProfileInfo'
 import RepoRow from '../repos/RepoRow'
+import axios from 'axios'
 
 const styles = {
   underNavbar: {
@@ -13,6 +14,32 @@ const styles = {
 }
 
 class Profile extends Component {
+  constructor () {
+    super()
+    this.state = {
+      userAvatar: ''
+    }
+  }
+  componentWillMount () {
+    axios.get('https://api.github.com/users/twalatka')
+      .then((userInfo) => {
+        this.setState({
+          userAvatar: userInfo.data.avatar_url
+        })
+      })
+      .catch((error) => {
+        console.error(error)
+      }),
+    axios.get('https://api.github.com/users/twalatka/repos')
+    .then((userRepos) => {
+      this.setState({
+        userRepos({
+          
+        })
+      })
+    })
+  }
+
   render () {
     const classes = this.props.classes
 
@@ -20,7 +47,7 @@ class Profile extends Component {
       <Container className={classes.underNavbar}>
         <Row>
           <Col sm="4">
-            <ProfileInfo/>
+            <ProfileInfo avatarUrl={this.state.userAvatar}/>
           </Col>
           <Col sm="8">
             <h3>Projects</h3>
